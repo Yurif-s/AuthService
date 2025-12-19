@@ -1,6 +1,8 @@
 ﻿using AuthService.Domain.Repositories;
+using AuthService.Domain.Security.Cryptography;
 using AuthService.Infrastructure.DataAccess;
 using AuthService.Infrastructure.DataAccess.Repositories;
+using AuthService.Infrastructure.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +15,8 @@ public static class DependencyInjectionExtension
     {
         AddDbContext(services, configuration);
         AddRepositories(services);
+
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
     }
     private static void AddDbContext(IServiceCollection services, IConfiguration configuration)
     {
