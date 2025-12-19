@@ -12,12 +12,12 @@ internal class UserRepository : IUserRepository
         _dbContext = dbContext;
     }
 
-    public async Task AddAsync(User user)
+    public async Task Add(User user)
     {
         await _dbContext.Users.AddAsync(user);
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> Delete(Guid id)
     {
         var user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == id);
 
@@ -28,26 +28,31 @@ internal class UserRepository : IUserRepository
         return true;
     }
 
-    public async Task<bool> EmailExistAsync(string email)
+    public async Task<bool> EmailExist(string email)
     {
         return await _dbContext.Users.AnyAsync(user => user.Email == email);
     }
 
-    public async Task<User?> GetByEmailAsync(string email)
+    public async Task<List<User>> GetAll()
+    {
+        return await _dbContext.Users.AsNoTracking().ToListAsync();
+    }
+
+    public async Task<User?> GetByEmail(string email)
     {
         return await _dbContext.Users
             .Include(user => user.RefreshTokens)
             .FirstOrDefaultAsync(user => user.Email == email);
     }
 
-    public async Task<User?> GetByIdAsync(Guid id)
+    public async Task<User?> GetById(Guid id)
     {
         return await _dbContext.Users
             .Include(user => user.RefreshTokens)
             .FirstOrDefaultAsync(user => user.Id == id);
     }
 
-    public void UpdateAsync(User user)
+    public void Update(User user)
     {
         _dbContext.Users.Update(user);
     }
