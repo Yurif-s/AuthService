@@ -1,3 +1,5 @@
+using AuthService.Api.Filters;
+using AuthService.Application;
 using AuthService.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +11,9 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApiDocument();
 
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication();
+
+builder.Services.AddMvc(opt => opt.Filters.Add(typeof(ExceptionFilter)));
 
 var app = builder.Build();
 
