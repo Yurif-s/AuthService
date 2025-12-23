@@ -11,13 +11,13 @@ public class ExceptionFilter : IExceptionFilter
     {
         if (context.Exception is AuthServiceException)
         {
-            HandleValidationException(context);
+            HandleApplicationException(context);
         }
         else
             ThrowInternalServerError(context);
     }
 
-    private void HandleValidationException(ExceptionContext context)
+    private void HandleApplicationException(ExceptionContext context)
     {
         var authServiceException = (AuthServiceException)context.Exception;
 

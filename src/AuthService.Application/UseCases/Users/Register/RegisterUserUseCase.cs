@@ -23,7 +23,7 @@ public class RegisterUserUseCase : IRegisterUserUseCase
     }
     public async Task<ResponseRegisteredUserJson> Execute(RequestUserJson request)
     {
-        Validate(request);
+        await Validate(request);
 
         var user = _mapper.Map<User>(request);
         user.Id = Guid.NewGuid();
@@ -35,11 +35,16 @@ public class RegisterUserUseCase : IRegisterUserUseCase
 
         return _mapper.Map<ResponseRegisteredUserJson>(user);
     }
-    private void Validate(RequestUserJson request)
+    private async Task Validate(RequestUserJson request)
     {
         var validator = new UserValidator();
 
         var result = validator.Validate(request);
+
+        var emailExists = await _repository.EmailExist(request.Email);
+
+        if (emailExists)
+            result.Errors.Add(new FluentValidation.Results.ValidationFailure(string.Empty, "Email already registered."));
 
         if (!result.IsValid)
         {
