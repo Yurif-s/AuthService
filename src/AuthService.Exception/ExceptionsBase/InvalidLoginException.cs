@@ -5,7 +5,7 @@ namespace AuthService.Exception.ExceptionsBase;
 
 public class InvalidLoginException : AuthServiceException
 {
-    public InvalidLoginException() : base("Email and/or password inválidos.")
+    public InvalidLoginException() : base("Invalid email and/or password.")
     {
         
     }
