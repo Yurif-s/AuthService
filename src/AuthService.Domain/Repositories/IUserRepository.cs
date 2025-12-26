@@ -9,7 +9,7 @@ public interface IUserRepository
     Task<User?> GetById(Guid id);
 
     Task Add(User user);
-    void Update(User user);
+    Task<bool> Update(User user);
 
     Task<bool> Delete(Guid id);
 

@@ -1,6 +1,5 @@
 ﻿using AuthService.Domain.Entities;
 using AuthService.Domain.Security.Tokens;
-using AuthService.Infrastructure.DataAccess;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -10,11 +9,11 @@ namespace AuthService.Infrastructure.Security.Tokens;
 
 internal class AccessTokenGenerator : IAccessTokenGenerator
 {
-    private readonly uint _expirationTimeMinutes;
+    private readonly uint _jwtExpirationTimeMinutes;
     private readonly string _signingKey;
-    public AccessTokenGenerator(uint expirationTimeMinutes, string signingKey)
+    public AccessTokenGenerator(uint JwtExpirationTimeMinutes, string signingKey)
     {
-        _expirationTimeMinutes = expirationTimeMinutes;
+        _jwtExpirationTimeMinutes = JwtExpirationTimeMinutes;
         _signingKey = signingKey;
     }
     public string Generate(User user)
