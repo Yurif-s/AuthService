@@ -1,32 +1,55 @@
 ﻿using AuthService.Domain.Entities;
 using AuthService.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuthService.Infrastructure.DataAccess.Repositories;
 
 internal class RefreshTokenRepository : IRefreshTokenRepository
 {
-    public Task Add(RefreshToken refreshToken)
+    private readonly AppDbContext _dbContext;
+    public RefreshTokenRepository(AppDbContext dbContext)
     {
-        throw new NotImplementedException();
+        _dbContext = dbContext;
+    }
+    public async Task Add(RefreshToken refreshToken)
+    {
+        await _dbContext.RefreshTokens.AddAsync(refreshToken);
     }
 
-    public Task<RefreshToken?> GetByToken(string token)
+    public async Task<RefreshToken?> GetByToken(string token)
     {
-        throw new NotImplementedException();
+        var refreshToken = await _dbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == token);
+
+        return refreshToken;
     }
 
-    public Task<List<RefreshToken>> GetByUser(Guid userId)
+    public async Task<List<RefreshToken>> GetByUser(Guid userId)
     {
-        throw new NotImplementedException();
+        var refreshTokens = await _dbContext.RefreshTokens.Where(rt => rt.UserId == userId).ToListAsync();
+
+        return refreshTokens;
     }
 
-    public Task<bool> Remove(RefreshToken refreshToken)
+    public async Task<bool> Delete(Guid id)
     {
-        throw new NotImplementedException();
+        var refreshToken = await _dbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Id == id);
+
+        if (refreshToken is null)
+            return false;
+
+        _dbContext.RefreshTokens.Remove(refreshToken);
+        return true;
     }
 
-    public Task<bool> Revoke(RefreshToken refreshToken)
+    public async Task<bool> Revoke(Guid id)
     {
-        throw new NotImplementedException();
+        var refreshToken = await _dbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Id == id);
+
+        if (refreshToken is null)
+            return false;
+
+        refreshToken.IsRevoked = true;
+
+        return true;
     }
 }
