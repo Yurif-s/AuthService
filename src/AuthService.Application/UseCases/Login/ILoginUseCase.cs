@@ -5,5 +5,5 @@ namespace AuthService.Application.UseCases.Login;
 
 public interface ILoginUseCase
 {
-    public Task<ResponseRegisteredUserJson> Execute(RequestLoginJson request);
+    public Task<ResponseLoggedUserJson> Execute(RequestLoginJson request);
 }
