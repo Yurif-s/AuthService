@@ -35,11 +35,12 @@ public static class DependencyInjectionExtension
     }
     private static void AddToken(IServiceCollection services, IConfiguration configuration)
     {
-        var jwtExpirationTimeMinutes = configuration.GetValue<uint>("Settings:Jwt:ExpiresMinutes");
-        var refreshExpirationTimeMinutes = configuration.GetValue<uint>("Settings:Refresh:ExpiresMinutes");
+        var jwtExpirationTimeMinutes = configuration.GetValue<uint>("Settings:Jwt:JwtExpiresMinutes");
+        var refreshExpirationTimeMinutes = configuration.GetValue<uint>("Settings:Refresh:RefreshExpiresMinutes");
         var signingKey = configuration.GetValue<string>("Settings:Jwt:SigningKey");
 
         services.AddScoped<IRefreshTokenGenerator, RefreshTokenGenerator>();
-        services.AddScoped<IAccessTokenGenerator, AccessTokenGenerator>();
+        services.AddScoped<IRefreshTokenFactory>(cfg => new RefreshTokenFactory(refreshExpirationTimeMinutes));
+        services.AddScoped<IAccessTokenGenerator>(cfg => new AccessTokenGenerator(jwtExpirationTimeMinutes, signingKey!));
     }
 }

@@ -15,7 +15,7 @@ public class LoginUseCase : ILoginUseCase
     private readonly IPasswordHasher _passwordHasher;
     private readonly IAccessTokenGenerator _accessTokenGenerator;
     private readonly IRefreshTokenGenerator _refreshTokenGenerator;
-    private readonly uint _refreshExpirationTimeMinutes;
+    private readonly IRefreshTokenFactory _refreshTokenFactory;
     private readonly IUnitOfWork _unitOfWork;
     public LoginUseCase(
         IRefreshTokenRepository rtRepository,
@@ -23,7 +23,7 @@ public class LoginUseCase : ILoginUseCase
         IPasswordHasher passwordHasher,
         IAccessTokenGenerator accessTokenGenerator,
         IRefreshTokenGenerator refreshTokenGenerator,
-        uint refreshExpirationTimeMinutes,
+        IRefreshTokenFactory refreshTokenFactory,
         IUnitOfWork unitOfWork)
     {
         _userRepository = userRepository;
@@ -31,20 +31,15 @@ public class LoginUseCase : ILoginUseCase
         _passwordHasher = passwordHasher;
         _accessTokenGenerator = accessTokenGenerator;
         _refreshTokenGenerator = refreshTokenGenerator;
-        _refreshExpirationTimeMinutes = refreshExpirationTimeMinutes;
+        _refreshTokenFactory = refreshTokenFactory;
         _unitOfWork = unitOfWork;
     }
     public async Task<ResponseLoggedUserJson> Execute(RequestLoginJson request)
     {
         var user = await Validate(request);
 
-        var refreshToken = new RefreshToken
-        {
-            Token = _refreshTokenGenerator.GenerateRefreshToken(),
-            ExpiresAt = DateTime.UtcNow.AddMinutes(_refreshExpirationTimeMinutes),
-            Id = Guid.NewGuid(),
-            UserId = user.Id
-        };
+        var refreshToken = await _refreshTokenFactory.Create(user.Id);
+        refreshToken.Token = _refreshTokenGenerator.GenerateRefreshToken();
 
         await _rtRepository.Add(refreshToken);
         await _unitOfWork.Commit();

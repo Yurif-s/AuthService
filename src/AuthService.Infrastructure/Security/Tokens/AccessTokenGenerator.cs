@@ -11,9 +11,9 @@ internal class AccessTokenGenerator : IAccessTokenGenerator
 {
     private readonly uint _jwtExpirationTimeMinutes;
     private readonly string _signingKey;
-    public AccessTokenGenerator(uint JwtExpirationTimeMinutes, string signingKey)
+    public AccessTokenGenerator(uint jwtExpirationTimeMinutes, string signingKey)
     {
-        _jwtExpirationTimeMinutes = JwtExpirationTimeMinutes;
+        _jwtExpirationTimeMinutes = jwtExpirationTimeMinutes;
         _signingKey = signingKey;
     }
     public string Generate(User user)
@@ -26,7 +26,7 @@ internal class AccessTokenGenerator : IAccessTokenGenerator
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Expires = DateTime.UtcNow.AddMinutes(_expirationTimeMinutes),
+            Expires = DateTime.UtcNow.AddMinutes(_jwtExpirationTimeMinutes),
             SigningCredentials = new SigningCredentials(SecurityKey(), SecurityAlgorithms.HmacSha256Signature),
             Subject = new ClaimsIdentity(claims)
         };

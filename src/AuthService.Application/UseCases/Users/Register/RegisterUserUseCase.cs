@@ -14,6 +14,7 @@ public class RegisterUserUseCase : IRegisterUserUseCase
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IPasswordHasher _passwordHasher;
+    private readonly IUserRepository _userRepository;
     public RegisterUserUseCase(IUserRepository repository, IUnitOfWork unitOfWork, IMapper mapper, IPasswordHasher passwordHasher)
     {
         _repository = repository;
@@ -28,6 +29,7 @@ public class RegisterUserUseCase : IRegisterUserUseCase
         var user = _mapper.Map<User>(request);
         user.Id = Guid.NewGuid();
         user.Password = _passwordHasher.Hash(request.Password);
+        user.IsActive = true;
 
         await _repository.Add(user);
 
