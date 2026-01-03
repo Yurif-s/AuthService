@@ -5,6 +5,7 @@ using AuthService.Application.UseCases.Users.Register;
 using AuthService.Application.UseCases.Users.Update;
 using AuthService.Communication.Requests;
 using AuthService.Communication.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthService.Api.Controllers;
@@ -52,6 +53,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpDelete]
+    [Authorize]
     [Route("{id:Guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ResponseErrorMessageJson), StatusCodes.Status404NotFound)]
@@ -65,6 +67,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize]
     [Route("{id:Guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ResponseErrorMessageJson), StatusCodes.Status400BadRequest)]
