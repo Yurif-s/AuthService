@@ -52,12 +52,8 @@ internal class UserRepository : IUserRepository
             .FirstOrDefaultAsync(user => user.Id == id);
     }
 
-    public async Task<bool> Update(User user)
+    public void Update(User user)
     {
-        if (user is null)
-            return false;
-
         _dbContext.Users.Update(user);
-        return true;
     }
 }

@@ -21,7 +21,7 @@ public class RegisterUserUseCase : IRegisterUserUseCase
         _mapper = mapper;
         _passwordHasher = passwordHasher;
     }
-    public async Task<ResponseRegisteredUserJson> Execute(RequestUserJson request)
+    public async Task<ResponseRegisteredUserJson> Execute(RequestRegisterUserJson request)
     {
         await Validate(request);
 
@@ -36,9 +36,9 @@ public class RegisterUserUseCase : IRegisterUserUseCase
 
         return _mapper.Map<ResponseRegisteredUserJson>(user);
     }
-    private async Task Validate(RequestUserJson request)
+    private async Task Validate(RequestRegisterUserJson request)
     {
-        var validator = new UserValidator();
+        var validator = new RegisterUserValidator();
 
         var result = validator.Validate(request);
 
