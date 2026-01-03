@@ -1,9 +1,9 @@
 ﻿using AuthService.Application.UseCases.Users.Delete;
+using AuthService.Application.UseCases.Users.GetAll;
 using AuthService.Application.UseCases.Users.GetById;
 using AuthService.Application.UseCases.Users.Register;
 using AuthService.Communication.Requests;
 using AuthService.Communication.Responses;
-using AuthService.Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthService.Api.Controllers;
@@ -35,6 +35,19 @@ public class UsersController : ControllerBase
         var response = await useCase.Execute(id);
 
         return Ok(response);
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(ResponseUsersJson), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> GetAll([FromServices] IGetAllUsersUseCase usecase)
+    {
+        var response = await usecase.Execute();
+
+        if (response.Users.Count != 0)
+            return Ok(response);
+
+        return NoContent();
     }
 
     [HttpDelete]
