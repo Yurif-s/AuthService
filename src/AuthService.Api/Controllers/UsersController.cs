@@ -1,4 +1,5 @@
-﻿using AuthService.Application.UseCases.Users.GetById;
+﻿using AuthService.Application.UseCases.Users.Delete;
+using AuthService.Application.UseCases.Users.GetById;
 using AuthService.Application.UseCases.Users.Register;
 using AuthService.Communication.Requests;
 using AuthService.Communication.Responses;
@@ -34,5 +35,18 @@ public class UsersController : ControllerBase
         var response = await useCase.Execute(id);
 
         return Ok(response);
+    }
+
+    [HttpDelete]
+    [Route("{id:Guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ResponseErrorMessageJson), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Delete(
+        [FromRoute] Guid id,
+        [FromServices] IDeleteUserUseCase useCase)
+    {
+        await useCase.Execute(id);
+
+        return NoContent();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AuthService.Application.AutoMapper;
 using AuthService.Application.UseCases.Login;
+using AuthService.Application.UseCases.Users.Delete;
 using AuthService.Application.UseCases.Users.GetById;
 using AuthService.Application.UseCases.Users.Register;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,7 @@ public static class DependencyInjectionExtension
     {
         services.AddScoped<IRegisterUserUseCase, RegisterUserUseCase>();
         services.AddScoped<IGetUserByIdUseCase, GetUserByIdUseCase>();
+        services.AddScoped<IDeleteUserUseCase, DeleteUserUseCase>();
         services.AddScoped<ILoginUseCase, LoginUseCase>();
     }
     private static void AddAutoMapper(IServiceCollection services)
