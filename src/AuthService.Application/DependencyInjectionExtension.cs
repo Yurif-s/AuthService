@@ -1,4 +1,5 @@
 ﻿using AuthService.Application.AutoMapper;
+using AuthService.Application.UseCases.Auth.Refresh;
 using AuthService.Application.UseCases.Login;
 using AuthService.Application.UseCases.Users.Delete;
 using AuthService.Application.UseCases.Users.GetAll;
@@ -24,6 +25,7 @@ public static class DependencyInjectionExtension
         services.AddScoped<IUpdateUserUseCase, UpdateUserUseCase>();
         services.AddScoped<IDeleteUserUseCase, DeleteUserUseCase>();
         services.AddScoped<ILoginUseCase, LoginUseCase>();
+        services.AddScoped<IRefreshTokenUseCase, RefreshTokenUseCase>();
     }
     private static void AddAutoMapper(IServiceCollection services)
     {

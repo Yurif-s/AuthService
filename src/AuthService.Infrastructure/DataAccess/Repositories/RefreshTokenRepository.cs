@@ -18,7 +18,10 @@ internal class RefreshTokenRepository : IRefreshTokenRepository
 
     public async Task<RefreshToken?> GetByToken(string token)
     {
-        var refreshToken = await _dbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == token);
+        var refreshToken = await _dbContext.RefreshTokens
+            .Include(rt => rt.User)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(rt => rt.Token == token);
 
         return refreshToken;
     }
