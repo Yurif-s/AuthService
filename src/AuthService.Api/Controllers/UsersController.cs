@@ -2,6 +2,7 @@
 using AuthService.Application.UseCases.Users.GetAll;
 using AuthService.Application.UseCases.Users.GetById;
 using AuthService.Application.UseCases.Users.Register;
+using AuthService.Application.UseCases.Users.Update;
 using AuthService.Communication.Requests;
 using AuthService.Communication.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -59,6 +60,21 @@ public class UsersController : ControllerBase
         [FromServices] IDeleteUserUseCase useCase)
     {
         await useCase.Execute(id);
+
+        return NoContent();
+    }
+
+    [HttpPut]
+    [Route("{id:Guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ResponseErrorMessageJson), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ResponseErrorMessageJson), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Update(
+        [FromRoute] Guid id,
+        [FromBody] RequestUpdateUserJson request,
+        [FromServices] IUpdateUserUseCase useCase)
+    {
+        await useCase.Execute(id, request);
 
         return NoContent();
     }
