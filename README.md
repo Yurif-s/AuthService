@@ -24,16 +24,15 @@ Este projeto implementa JWT + Refresh Tokens, permitindo autenticação segura e
 - Repositórios explícitos
 - Separação entre geração de token e criação de entidade
 
-###🔑 Autenticação
+### 🔑 Autenticação
 🔐 JWT (Access Token)
 - Curta duração
 - Usado para acessar endpoints protegidos
+
 🔄 Refresh Token
 - Persistido no banco
 - Associado ao usuário
-- Possui:
-  - Expiração
-  -Flag de revogação
+- Possui expiração
 - Utilizado para gerar novos Access Tokens
 
 ### 🛠 Tecnologias utilizadas
@@ -45,3 +44,10 @@ Este projeto implementa JWT + Refresh Tokens, permitindo autenticação segura e
 - AutoMapper
 - FluentValidation
 - SQL Server
+
+### 📌 Próximos passos (v2)
+- 🔄 Refresh Token Rotation
+- 🚫 Revogação de sessões
+- 📱 Logout por dispositivo
+- 🧪 Testes automatizados
+- 📦 Versionamento de API
